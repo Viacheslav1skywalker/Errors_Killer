@@ -1,9 +1,9 @@
 '''Модуль по исправлению выявленных ошибок в коде'''
-
+'''и эта надпись тоже должна исчезнуть при переключении на другу ветку'''
 
 from abc import ABC
 from abc import abstractmethod
-from projectHalfStart import gigachat_responce
+import gigachat_responce
 import re
 import Errors
 
