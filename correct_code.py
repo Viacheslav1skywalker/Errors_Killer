@@ -1,45 +1,25 @@
-def check_number(num):
-    if num % 2 == 0:
-        print("Число четное")
-    else:
-        print("Число нечетное")
+import os
 
+# Проверяем, существует ли файл
+if os.path.exists("несуществующий_файл.txt"):
+    with open("несуществующий_файл.txt", "r") as file:
+        content = file.read()
+        print(content)
+else:
+    print("Файл не существует")
 
-num = 10
-check_number(num)
+def outer_function():
+    global x
+    x = 10
 
+    def inner_function():
+        global x
+        x += 5
+        print(f"Внутри внутренней функции: {x}")
 
-def check_number(num):
-    if num % 2 == 0:
-        print("Число четное")
-    else:
-        print("Число нечетное")
+    inner_function()
+    print(f"Внутри внешней функции: {x}")
 
+    return x
 
-num = 10
-check_number(num)
-
-
-def calculate_area():
-    area = length * width
-    print("Площадь прямоугольника:", area)
-
-
-length = 10
-calculate_area()
-
-
-x = 5
-if x == 5:
-    print("x равно 5")
-
-
-my_variable = "Hello"
-print(my_variable)
-
-
-def my_function():
-    print("Привет")
-
-
-my_function()
+x = outer_function()

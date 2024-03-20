@@ -68,6 +68,7 @@ class HighLight:
                         split1 = self.list_new_strings[i].split(' ')
                         split2 = change_need_strings[i][0].split(' ')
                         for i in split1:
+
                             if i == '':
                                 adding += Style.RESET_ALL + ' '
                                 continue
