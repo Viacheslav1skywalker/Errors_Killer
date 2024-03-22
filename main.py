@@ -6,7 +6,7 @@ import displayData
 
 
 def main(code,deskription=False):
-    '''Функция которая управляет логикой работы программы'''
+    '''Главная функция для отображения результатов текущей работы программы'''
     information = check_correcting(code,deskription)
     if len(information) == 1:
         print('все сведения об исправленных ошибках:')
