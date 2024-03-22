@@ -1,12 +1,8 @@
 '''моудль по анализу кода на ошибки'''
-
-
-import fixError
 from traceback import format_exc
-import re
-import black
 import Errors
-import  code_highlight
+import sys
+import io
 
 class AnlizesError:
     def analize(self,code:str):
@@ -32,12 +28,19 @@ class AnlizesError:
                 return len(code)
     def check_code_exceptions(self,code):
         try:
+            # перенаправляем вывод чтобы не оторажать результат работы анализируемого кода
+            # в консоли
+            sys.stdout = io.StringIO()
             exec(code)
+            sys.stdout = sys.__stdout__
             print('ваш код работает исправно')
             return None
         except Exception as ex:
             tb = format_exc()
             return str(tb)
+        finally:
+            sys.stdout = sys.__stdout__
+
 
 
 

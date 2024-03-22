@@ -3,33 +3,48 @@ import fixError
 import displayData
 
 
+
+
 def main(code,deskription=False):
     '''Функция которая управляет логикой работы программы'''
-    result = check_correcting(code,deskription)
-    if result[-1] == 'only_code':
-        displayData.FileDisplay().file_write(result[0])
-        return result[0]
-    elif result[-1] == 'explain':
-        return result[0]
-
+    information = check_correcting(code,deskription)
+    if len(information) == 1:
+        print('все сведения об исправленных ошибках:')
+        print(f'''Ваш код был проанализирован. Вот информация которую 
+        вы должны изучить чтобы исправить ошибки:\n{information[0]}''')
+        return information[0]
+    print('Результаты исправления кода для подробного ознакомления:')
+    print("""ЕСЛИ ХОТИТЕ СРАЗУ ПЕРЕЙТИ К ПРОСМОТРУ РЕЗУЛЬТАТА ТО ОН НАХОДИТСЯ
+             В ФАЙЛЕ - correct_code.py""")
+    for index,inf in enumerate(information[0:-1]):
+        print()
+        print(f'''на {index+1} этапе в коде была исправлена следующая 
+            ошибка: {inf[1]}\n вот код с пояснением и исправлением данной ошибки:
+            \n {inf[0]}''')
+        print()
+        print(f'конец пояснения и исправления {index+1} ошибки')
+        print()
+    displayData.FileDisplay().file_write(information[-1][-1]) if len(information[-1]) == 3 else None
+    print(f'результат работы программы и конечный исправленный вариант:\n{information[-1][-1]}')
+    return information[-1][-1]
     
 
-def check_not_first_launch(code,error_message):
-    NNWork = fixError.IdentificationProcessingFuncError().check_descriptive_errors(error_message)
-    if fixError.IdentificationProcessingFuncError().check_descriptive_errors(error_message):
-        return NNWork(code,error_message).fix()
+# def check_not_first_launch(code,error_message):
+#     NNWork = fixError.IdentificationProcessingFuncError().check_descriptive_errors(error_message)
+#     if fixError.IdentificationProcessingFuncError().check_descriptive_errors(error_message):
+#         return NNWork(code,error_message).fix()
 
 
-def display_code(displaying_data:str):
-    """Функция отображения соответствующего кода или информации"""
-
-    print()
-    print('результат ->')
-    print()
-    print(displaying_data)
-    print()
-    print('конец кода')
-    print()
+# def display_code(displaying_data:str):
+#     """Функция отображения соответствующего кода или информации"""
+#
+#     print()
+#     print('результат ->')
+#     print()
+#     print(displaying_data)
+#     print()
+#     print('конец кода')
+#     print()
 
 
 def check_file_or_codestring(code):
@@ -45,28 +60,30 @@ def check_correcting(code,deskription):
     пока ошибки не станут повторяться 3 раза или пока их вообще не будет"""
     checking_code = code
     current_error = None
+    get_result = False
     for i in range(4):
-        print(f'{i} вызов')
+        # print(f'{i} вызов')
         code = check_file_or_codestring(checking_code)
         analize = analisesError.AnlizesError()
         error_message = analize.analize(code)
-        print(error_message)
+        if error_message == current_error and error_message != None:
+            # print('в коде возникает одна и та же ошибка')
+            break
+        current_error = error_message
+        # print(error_message)
         if not error_message:
-            print('Код работает исправно, код завершен без ошибок')
-            return code,'only_code'
+            # print('Код работает исправно, код завершен без ошибок')
+            break
         processing_obj = fixError.IdentificationProcessingFuncError(). \
             return_processing_obj(code, error_message, deskription)
         if check_description_class(processing_obj):
-            print('обработка кода завершена с пояснением к ошибкам в коде')
-            return processing_obj.fix(),'explain'
-        checking_code = processing_obj.fix()
-        if error_message == current_error:
+            # print('обработка кода завершена с пояснением к ошибкам в коде')
             break
-        current_error = error_message
-    print()
-    print('обработка кода завершена вот итоговый код -----')
-    print()
-    return checking_code,'only_code'
+        checking_code = processing_obj.fix()[-1]
+    # print()
+    # print('обработка кода завершена вот итоговый код -----')
+    # print()
+    return fixError.inf
 
 
 def check_description_class(processing_obj):
@@ -75,7 +92,6 @@ def check_description_class(processing_obj):
     for i in fixError.explanation_error_classes:
         if processing_obj.__class__.__name__ == i:
             return True
-
 
 
 
